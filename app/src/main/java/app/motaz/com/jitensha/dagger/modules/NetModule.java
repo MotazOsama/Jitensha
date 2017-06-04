@@ -64,6 +64,7 @@ public class NetModule {
                 .baseUrl(mBaseUrl)
                 .client(okHttpClient)
                 .build();
+        
         return retrofit;
     }
 }

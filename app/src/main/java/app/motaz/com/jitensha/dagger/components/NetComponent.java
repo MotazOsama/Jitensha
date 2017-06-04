@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import app.motaz.com.jitensha.dagger.modules.AppModule;
 import app.motaz.com.jitensha.dagger.modules.NetModule;
+import app.motaz.com.jitensha.view.activities.LoginActivity;
 import dagger.Component;
 
 /**
@@ -13,5 +14,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class, NetModule.class})
 public interface NetComponent {
-
+    void inject(LoginActivity loginActivity);
 }
