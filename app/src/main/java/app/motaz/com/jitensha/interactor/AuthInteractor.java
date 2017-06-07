@@ -3,10 +3,18 @@ package app.motaz.com.jitensha.interactor;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.android.agera.Repositories;
+import com.google.android.agera.Repository;
+import com.google.android.agera.Result;
+import com.google.android.agera.Supplier;
+
+import java.util.concurrent.Executors;
+
 import javax.inject.Inject;
 
 import app.motaz.com.jitensha.JitenshaApp;
 import app.motaz.com.jitensha.dataaccesslayer.api.APIDataManager;
+import app.motaz.com.jitensha.models.AuthResponse;
 
 /**
  * Created by motaz on 6/6/17.
@@ -15,7 +23,7 @@ import app.motaz.com.jitensha.dataaccesslayer.api.APIDataManager;
 public class AuthInteractor {
     private Context mContext;
     private String TAG = AuthInteractor.class.getName();
-
+    private Repository<Result<AuthResponse>> repository;
     @Inject
     APIDataManager apiDataManager;
 
@@ -26,7 +34,21 @@ public class AuthInteractor {
 
     public void login(String userName, String password) {
         Log.d(TAG, "login: ");
-        apiDataManager.login(userName, password);
+        Supplier<Result<AuthResponse>> supplier = apiDataManager.login(userName, password);
+        repository = Repositories.repositoryWithInitialValue(Result.<AuthResponse>absent())
+                .observe()
+                .onUpdatesPerLoop()
+                .goTo(Executors.newSingleThreadExecutor())
+                .attemptGetFrom(supplier)
+                .orEnd(input -> Result.failure(input))
+                .thenTransform(input -> Result.success(input))
+                .compile();
+        repository.addUpdatable(() -> {
+            if (repository.get().isPresent() && repository.get().succeeded()) {
+                AuthResponse authResponse = repository.get().get();
+                Log.d(TAG, "login: " + authResponse.getAccessToken());
+            }
+        });
     }
 
     public void saveAuthTokenInPreferences(String authToken) {

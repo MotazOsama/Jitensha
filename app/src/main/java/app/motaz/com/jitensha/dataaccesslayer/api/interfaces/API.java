@@ -1,8 +1,10 @@
 package app.motaz.com.jitensha.dataaccesslayer.api.interfaces;
 
+import com.google.android.agera.Result;
+import com.google.android.agera.Supplier;
+
 import app.motaz.com.jitensha.models.AuthRequest;
 import app.motaz.com.jitensha.models.AuthResponse;
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
@@ -12,5 +14,5 @@ import retrofit2.http.POST;
 
 public interface API {
     @POST("auth")
-    Call<AuthResponse> login(@Body AuthRequest authRequest);
+    Supplier<Result<AuthResponse>> login(@Body AuthRequest authRequest);
 }

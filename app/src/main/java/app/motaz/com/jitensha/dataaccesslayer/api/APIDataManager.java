@@ -1,7 +1,9 @@
 package app.motaz.com.jitensha.dataaccesslayer.api;
 
 import android.content.Context;
-import android.util.Log;
+
+import com.google.android.agera.Result;
+import com.google.android.agera.Supplier;
 
 import javax.inject.Inject;
 
@@ -9,9 +11,6 @@ import app.motaz.com.jitensha.JitenshaApp;
 import app.motaz.com.jitensha.dataaccesslayer.api.interfaces.API;
 import app.motaz.com.jitensha.models.AuthRequest;
 import app.motaz.com.jitensha.models.AuthResponse;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 /**
@@ -28,26 +27,12 @@ public class APIDataManager {
         ((JitenshaApp) context).getAppComponent().inject(this);
     }
 
-    public void login(String username, String password) {
+    public Supplier<Result<AuthResponse>> login(String username, String password) {
         API api = retrofit.create(API.class);
         AuthRequest authRequest = new AuthRequest();
         authRequest.setEmail(username);
         authRequest.setPassword(password);
-        Call<AuthResponse> call = api.login(authRequest);
-        call.enqueue(new Callback<AuthResponse>() {
-
-            @Override
-            public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
-                Log.d(TAG, "onResponse: " + response.body().getAccessToken());
-            }
-
-            @Override
-            public void onFailure(Call<AuthResponse> call, Throwable t) {
-                Log.d(TAG, "onError: " + "error in login request.");
-
-            }
-        });
-
+        return api.login(authRequest);
     }
 
 

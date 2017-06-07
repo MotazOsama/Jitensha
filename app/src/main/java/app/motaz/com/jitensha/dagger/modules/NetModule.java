@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import app.motaz.com.jitensha.dataaccesslayer.api.APIDataManager;
 import dagger.Module;
 import dagger.Provides;
+import me.drakeet.retrofit2.adapter.agera.AgeraCallAdapterFactory;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -63,6 +64,7 @@ public class NetModule {
     @Singleton
     Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
         Retrofit retrofit = new Retrofit.Builder()
+                .addCallAdapterFactory(AgeraCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .baseUrl(mBaseUrl)
                 .client(okHttpClient)
