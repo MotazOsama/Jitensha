@@ -34,12 +34,14 @@ public class AuthInteractor {
         Log.d(TAG, "login: ");
         Supplier<Result<AuthResponse>> supplier = apiDataManager.login(userName, password);
         repository = new RepositoriesFactory<AuthResponse>().createRepository(supplier);
-        repository.addUpdatable(() -> {
-            if (repository.get().isPresent() && repository.get().succeeded()) {
-                AuthResponse authResponse = repository.get().get();
-                Log.d(TAG, "login: " + authResponse.getAccessToken());
-            }
-        });
+        repository.addUpdatable(this::loginCallback);
+    }
+
+    public void loginCallback() {
+        if (repository.get().isPresent() && repository.get().succeeded()) {
+            AuthResponse authResponse = repository.get().get();
+            Log.d(TAG, "login: " + authResponse.getAccessToken());
+        }
     }
 
     public void saveAuthTokenInPreferences(String authToken) {
