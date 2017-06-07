@@ -8,7 +8,7 @@ import com.google.android.agera.Supplier;
 import javax.inject.Inject;
 
 import app.motaz.com.jitensha.JitenshaApp;
-import app.motaz.com.jitensha.dataaccesslayer.api.interfaces.API;
+import app.motaz.com.jitensha.dataaccesslayer.interfaces.API;
 import app.motaz.com.jitensha.models.AuthRequest;
 import app.motaz.com.jitensha.models.AuthResponse;
 import retrofit2.Retrofit;
@@ -34,6 +34,5 @@ public class APIDataManager {
         authRequest.setPassword(password);
         return api.login(authRequest);
     }
-
 
 }

@@ -1,4 +1,4 @@
-package app.motaz.com.jitensha.dataaccesslayer.api.interfaces;
+package app.motaz.com.jitensha.dataaccesslayer.interfaces;
 
 import com.google.android.agera.Result;
 import com.google.android.agera.Supplier;

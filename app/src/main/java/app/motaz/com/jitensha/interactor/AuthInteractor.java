@@ -3,16 +3,14 @@ package app.motaz.com.jitensha.interactor;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.agera.Repositories;
 import com.google.android.agera.Repository;
 import com.google.android.agera.Result;
 import com.google.android.agera.Supplier;
 
-import java.util.concurrent.Executors;
-
 import javax.inject.Inject;
 
 import app.motaz.com.jitensha.JitenshaApp;
+import app.motaz.com.jitensha.dataaccesslayer.RepositriesFactory.RepositoriesFactory;
 import app.motaz.com.jitensha.dataaccesslayer.api.APIDataManager;
 import app.motaz.com.jitensha.models.AuthResponse;
 
@@ -35,14 +33,7 @@ public class AuthInteractor {
     public void login(String userName, String password) {
         Log.d(TAG, "login: ");
         Supplier<Result<AuthResponse>> supplier = apiDataManager.login(userName, password);
-        repository = Repositories.repositoryWithInitialValue(Result.<AuthResponse>absent())
-                .observe()
-                .onUpdatesPerLoop()
-                .goTo(Executors.newSingleThreadExecutor())
-                .attemptGetFrom(supplier)
-                .orEnd(input -> Result.failure(input))
-                .thenTransform(input -> Result.success(input))
-                .compile();
+        repository = new RepositoriesFactory<AuthResponse>().createRepository(supplier);
         repository.addUpdatable(() -> {
             if (repository.get().isPresent() && repository.get().succeeded()) {
                 AuthResponse authResponse = repository.get().get();
