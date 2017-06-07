@@ -1,6 +1,7 @@
 package app.motaz.com.jitensha.dagger.modules;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -9,6 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import javax.inject.Singleton;
 
+import app.motaz.com.jitensha.dataaccesslayer.api.APIDataManager;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -36,9 +38,10 @@ public class NetModule {
 
     @Provides
     @Singleton
-    Cache provideOkHttpCache(Application application) {
+    Cache provideOkHttpCache(Context context
+    ) {
         int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(application.getCacheDir(), cacheSize);
+        Cache cache = new Cache(context.getCacheDir(), cacheSize);
         return cache;
     }
 
@@ -64,7 +67,13 @@ public class NetModule {
                 .baseUrl(mBaseUrl)
                 .client(okHttpClient)
                 .build();
-        
+
         return retrofit;
+    }
+
+    @Provides
+    @Singleton
+    APIDataManager provideAPIDataManager(Context context) {
+        return new APIDataManager(context);
     }
 }

@@ -1,4 +1,4 @@
-package app.motaz.com.jitensha.dataaccesslayer.api;
+package app.motaz.com.jitensha.dataaccesslayer.api.interfaces;
 
 import app.motaz.com.jitensha.models.AuthRequest;
 import app.motaz.com.jitensha.models.AuthResponse;
