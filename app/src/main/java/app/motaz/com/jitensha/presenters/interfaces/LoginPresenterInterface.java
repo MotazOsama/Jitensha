@@ -7,7 +7,7 @@ import app.motaz.com.jitensha.view.interfaces.LoginViewInterface;
  */
 
 public interface LoginPresenterInterface<V extends LoginViewInterface> {
-    void usernameTextFieldChanged(String username);
+    void emailTextFieldChanged(String username);
 
     void passwordTextFieldChanged(String password);
 

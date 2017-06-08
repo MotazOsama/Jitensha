@@ -9,4 +9,6 @@ public interface LoginViewInterface {
     void showSuccessMsg(String successMsg);
 
     void showFailureMsg(String errorMsg);
+
+    void enableLoginBtn(boolean btnStatus);
 }
